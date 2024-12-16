@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
+st.image("https://github.com/pgarciakeyter/Predicci-n-Tiempos-M-quinas-Nuevas/blob/main/assets/keyter%20logo.png?raw=true")
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
