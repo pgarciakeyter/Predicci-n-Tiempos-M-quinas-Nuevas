@@ -4,6 +4,26 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
+def convertir_a_excel(archivo):
+    # Verificar si el archivo es un CSV o alguna otra fuente
+    if archivo.name.endswith('.csv'):
+        # Si el archivo es CSV, leerlo y guardarlo como Excel
+        df = pd.read_csv(archivo)
+        archivo_convertido = "archivo_convertido.xlsx"
+        df.to_excel(archivo_convertido, index=False)
+        return archivo_convertido
+    elif archivo.name.endswith('.sql'):
+        # Aquí podrías tener una lógica para ejecutar la consulta SQL y convertirla en un DataFrame
+        # Por ejemplo, usando un conector de base de datos. Este es un caso más avanzado.
+        # Para el propósito de este ejemplo, supongamos que el archivo SQL se convierte de alguna forma en DataFrame.
+        # Simulamos la conversión a DataFrame:
+        df = pd.read_sql("SELECT * FROM some_table", con)  # Esto depende de cómo te conectes a tu base de datos.
+        archivo_convertido = "archivo_convertido.xlsx"
+        df.to_excel(archivo_convertido, index=False)
+        return archivo_convertido
+    else:
+        return archivo.name  # Si ya es Excel, devolver el nombre tal cual
+
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
@@ -106,6 +126,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual
 
         st.write("---")
+        
+        
 
     # Mostrar la suma total de las predicciones
     st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
@@ -118,8 +140,11 @@ uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["x
 
 if uploaded_file is not None:
     basededatos = pd.read_excel(uploaded_file)
-    basededatos.to_excel("archivo_convertido.xlsx", index = False)
-    basededatos = pd.read_excel("archivo_convertido.xlsx")
+    #Si el archivo es una consulta SQL o CSV, convertirlo a Excel
+    archivo_final = convertir_a_excel(uploaded_file)
+    
+    # Leer el archivo convertido (si fue necesario)
+    basededatos = pd.read_excel(archivo_final)
     st.write("Vista previa de los datos:")
     st.write(basededatos.head())
 
