@@ -143,48 +143,53 @@ if uploaded_file is not None:
     #Si el archivo es una consulta SQL o CSV, convertirlo a Excel
     archivo_final = convertir_a_excel(uploaded_file)
     
-    # Leer el archivo convertido (si fue necesario)
-    basededatos = pd.read_excel(archivo_final)
-    st.write("Vista previa de los datos:")
-    st.write(basededatos.head())
-
-    # Preprocesamiento
-    basededatos = basededatos.drop(columns=["CENTRO"])
-    basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
-    basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    basededatos = basededatos.drop(columns=["NUMREGISTROS"])
-    basededatos = basededatos.drop(columns=["SUMAHORAS"])
-    group_sizes = basededatos.groupby('CODCENT').size()
-    basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
-    basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
-    valid_groups = group_sizes[group_sizes >= 10].index
-    basededatos = basededatos[basededatos['CODCENT'].isin(valid_groups)]
-    basededatos = basededatos[basededatos['CODCENT'] != 5440]
-    basededatos = basededatos.dropna(how='any')
-    basededatos["CHASIS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
+    if os.path.exists(archivo_final):
+        # Leer el archivo convertido (si fue necesario)
+        basededatos = pd.read_excel(archivo_final)
+        st.write("Vista previa de los datos:")
+        st.write(basededatos.head())
     
-    # Generar el diccionario
-    valores_familia = generar_diccionario_valores(basededatos, "FAMILIA")
-    valores_funcionamiento = generar_diccionario_valores(basededatos, "FUNCIONAMIENTO")
-    valores_version = generar_diccionario_valores(basededatos, "VERSION")
-    valores_versionhidr = generar_diccionario_valores(basededatos, "VERSIONHIDR")
-    basededatos.replace(valores_familia, inplace = True)
-    basededatos.replace(valores_funcionamiento, inplace = True)
-    basededatos.replace(valores_version, inplace = True)
-    basededatos.replace(valores_versionhidr, inplace = True)
-
-    #---------------------
-    valores_traduccion = {**valores_familia, **valores_funcionamiento, **valores_version, **valores_versionhidr}
-   
-    # Agrupar datos por CODCENT
-    grouped = basededatos.groupby('CODCENT')
-    # st.write("Tipos de datos de las columnas:", grouped.dtypes)
-
-    st.write("Introduce el nombre de la máquina")
-
-    # Entrada del usuario
-    entrada = st.text_input("Introduce la cadena de datos:", "")
-    nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
-
-    if nueva_maquina is not None:
-        predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
+        # Preprocesamiento
+        basededatos = basededatos.drop(columns=["CENTRO"])
+        basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
+        basededatos = basededatos.drop(columns=["MINIMOHORAS"])
+        basededatos = basededatos.drop(columns=["NUMREGISTROS"])
+        basededatos = basededatos.drop(columns=["SUMAHORAS"])
+        group_sizes = basededatos.groupby('CODCENT').size()
+        basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
+        basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
+        valid_groups = group_sizes[group_sizes >= 10].index
+        basededatos = basededatos[basededatos['CODCENT'].isin(valid_groups)]
+        basededatos = basededatos[basededatos['CODCENT'] != 5440]
+        basededatos = basededatos.dropna(how='any')
+        basededatos["CHASIS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
+        
+        # Generar el diccionario
+        valores_familia = generar_diccionario_valores(basededatos, "FAMILIA")
+        valores_funcionamiento = generar_diccionario_valores(basededatos, "FUNCIONAMIENTO")
+        valores_version = generar_diccionario_valores(basededatos, "VERSION")
+        valores_versionhidr = generar_diccionario_valores(basededatos, "VERSIONHIDR")
+        basededatos.replace(valores_familia, inplace = True)
+        basededatos.replace(valores_funcionamiento, inplace = True)
+        basededatos.replace(valores_version, inplace = True)
+        basededatos.replace(valores_versionhidr, inplace = True)
+    
+        #---------------------
+        valores_traduccion = {**valores_familia, **valores_funcionamiento, **valores_version, **valores_versionhidr}
+       
+        # Agrupar datos por CODCENT
+        grouped = basededatos.groupby('CODCENT')
+        # st.write("Tipos de datos de las columnas:", grouped.dtypes)
+    
+        st.write("Introduce el nombre de la máquina")
+    
+        # Entrada del usuario
+        entrada = st.text_input("Introduce la cadena de datos:", "")
+        nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+    
+        if nueva_maquina is not None:
+            predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
+else:
+        st.error("No se pudo encontrar el archivo convertido. Por favor, verifica que la conversión haya sido exitosa.")
+            
+        
