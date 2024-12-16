@@ -4,26 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
-def convertir_a_excel(archivo):
-    # Verificar si el archivo es un CSV o alguna otra fuente
-    if archivo.name.endswith('.csv'):
-        # Si el archivo es CSV, leerlo y guardarlo como Excel
-        df = pd.read_csv(archivo)
-        archivo_convertido = "archivo_convertido.xlsx"
-        df.to_excel(archivo_convertido, index=False)
-        return archivo_convertido
-    elif archivo.name.endswith('.sql'):
-        # Aquí podrías tener una lógica para ejecutar la consulta SQL y convertirla en un DataFrame
-        # Por ejemplo, usando un conector de base de datos. Este es un caso más avanzado.
-        # Para el propósito de este ejemplo, supongamos que el archivo SQL se convierte de alguna forma en DataFrame.
-        # Simulamos la conversión a DataFrame:
-        df = pd.read_sql("SELECT * FROM some_table", con)  # Esto depende de cómo te conectes a tu base de datos.
-        archivo_convertido = "archivo_convertido.xlsx"
-        df.to_excel(archivo_convertido, index=False)
-        return archivo_convertido
-    else:
-        return archivo.name  # Si ya es Excel, devolver el nombre tal cual
-
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
@@ -126,8 +106,6 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual
 
         st.write("---")
-        
-        
 
     # Mostrar la suma total de las predicciones
     st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
@@ -140,56 +118,46 @@ uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["x
 
 if uploaded_file is not None:
     basededatos = pd.read_excel(uploaded_file)
-    #Si el archivo es una consulta SQL o CSV, convertirlo a Excel
-    archivo_final = convertir_a_excel(uploaded_file)
+    st.write("Vista previa de los datos:")
+    st.write(basededatos.head())
+
+    # Preprocesamiento
+    basededatos = basededatos.drop(columns=["CENTRO"])
+    basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
+    basededatos = basededatos.drop(columns=["MINIMOHORAS"])
+    basededatos = basededatos.drop(columns=["NUMREGISTROS"])
+    basededatos = basededatos.drop(columns=["SUMAHORAS"])
+    group_sizes = basededatos.groupby('CODCENT').size()
+    basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
+    basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
+    valid_groups = group_sizes[group_sizes >= 10].index
+    basededatos = basededatos[basededatos['CODCENT'].isin(valid_groups)]
+    basededatos = basededatos[basededatos['CODCENT'] != 5440]
+    basededatos = basededatos.dropna(how='any')
+    basededatos["CHASIS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
     
-    if os.path.exists(archivo_final):
-        # Leer el archivo convertido (si fue necesario)
-        basededatos = pd.read_excel(archivo_final)
-        st.write("Vista previa de los datos:")
-        st.write(basededatos.head())
-    
-        # Preprocesamiento
-        basededatos = basededatos.drop(columns=["CENTRO"])
-        basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
-        basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-        basededatos = basededatos.drop(columns=["NUMREGISTROS"])
-        basededatos = basededatos.drop(columns=["SUMAHORAS"])
-        group_sizes = basededatos.groupby('CODCENT').size()
-        basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
-        basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
-        valid_groups = group_sizes[group_sizes >= 10].index
-        basededatos = basededatos[basededatos['CODCENT'].isin(valid_groups)]
-        basededatos = basededatos[basededatos['CODCENT'] != 5440]
-        basededatos = basededatos.dropna(how='any')
-        basededatos["CHASIS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
-        
-        # Generar el diccionario
-        valores_familia = generar_diccionario_valores(basededatos, "FAMILIA")
-        valores_funcionamiento = generar_diccionario_valores(basededatos, "FUNCIONAMIENTO")
-        valores_version = generar_diccionario_valores(basededatos, "VERSION")
-        valores_versionhidr = generar_diccionario_valores(basededatos, "VERSIONHIDR")
-        basededatos.replace(valores_familia, inplace = True)
-        basededatos.replace(valores_funcionamiento, inplace = True)
-        basededatos.replace(valores_version, inplace = True)
-        basededatos.replace(valores_versionhidr, inplace = True)
-    
-        #---------------------
-        valores_traduccion = {**valores_familia, **valores_funcionamiento, **valores_version, **valores_versionhidr}
-       
-        # Agrupar datos por CODCENT
-        grouped = basededatos.groupby('CODCENT')
-        # st.write("Tipos de datos de las columnas:", grouped.dtypes)
-    
-        st.write("Introduce el nombre de la máquina")
-    
-        # Entrada del usuario
-        entrada = st.text_input("Introduce la cadena de datos:", "")
-        nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
-    
-        if nueva_maquina is not None:
-            predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
-else:
-        st.error("No se pudo encontrar el archivo convertido. Por favor, verifica que la conversión haya sido exitosa.")
-            
-        
+    # Generar el diccionario
+    valores_familia = generar_diccionario_valores(basededatos, "FAMILIA")
+    valores_funcionamiento = generar_diccionario_valores(basededatos, "FUNCIONAMIENTO")
+    valores_version = generar_diccionario_valores(basededatos, "VERSION")
+    valores_versionhidr = generar_diccionario_valores(basededatos, "VERSIONHIDR")
+    basededatos.replace(valores_familia, inplace = True)
+    basededatos.replace(valores_funcionamiento, inplace = True)
+    basededatos.replace(valores_version, inplace = True)
+    basededatos.replace(valores_versionhidr, inplace = True)
+
+    #---------------------
+    valores_traduccion = {**valores_familia, **valores_funcionamiento, **valores_version, **valores_versionhidr}
+   
+    # Agrupar datos por CODCENT
+    grouped = basededatos.groupby('CODCENT')
+    # st.write("Tipos de datos de las columnas:", grouped.dtypes)
+
+    st.write("Introduce el nombre de la máquina")
+
+    # Entrada del usuario
+    entrada = st.text_input("Introduce la cadena de datos:", "")
+    nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+
+    if nueva_maquina is not None:
+        predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
