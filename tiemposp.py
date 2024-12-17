@@ -116,7 +116,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-            st.write(f"Predicción de horas imputadas del centro {int(codcent)} - {nombre_codcent} en este equipo: **{rf_predictions[0]} horas**")
+            rf_predictions_redondeados = list(map(lambda x: round(x, 2), rf_predictions))
+            st.write(f"Predicción de horas imputadas del centro {int(codcent)} - {nombre_codcent} en este equipo: **{rf_predictions_redondeados[0]} horas**")
             st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(rf_predictions)
 
