@@ -36,19 +36,9 @@ codcent_nombre = {
     5490: "CONTROLFINALYEMBALAJE"
 }
 
-
-
 # Funciones
-def traducir_valor_streamlit(campo, valor, valores_traduccion):
-    diccionario = valores_traduccion.get(campo)
-    if diccionario and valor in diccionario:
-        return diccionario[valor]
-    else:
-        st.error(f"El valor '{valor}' no es válido para el campo '{campo}'. Por favor, revisa los datos ingresados.")
-        #raise ValueError(f"El valor '{valor}' no es válido para el campo '{campo}'.")
-
 def solicitar_datos_usuario_streamlit(entrada):
-    if st.button("Buscar máquina"):
+    if st.button("Procesar datos"):
         if len(entrada) < 10:
             st.error("Error: La cadena es demasiado corta para contener todos los valores.")
             return None
