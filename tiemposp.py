@@ -48,7 +48,7 @@ def traducir_valor_streamlit(campo, valor, valores_traduccion):
         raise ValueError(f"El valor '{valor}' no es válido para el campo '{campo}'.")
 
 def solicitar_datos_usuario_streamlit(entrada):
-    if st.button("Procesar datos"):
+    if st.button("Buscar máquina"):
         if len(entrada) < 10:
             st.error("Error: La cadena es demasiado corta para contener todos los valores.")
             return None
@@ -103,7 +103,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
         if existe.any():  # Si existe un valor exacto en los registros
             if not mensaje_mostrado:                
-                st.write(f"#El equipo {entrada} ya ha sido fabricado antes")
+                st.write(f"<u>El equipo {entrada} ya ha sido fabricado antes</u>", unsafe_allow_html=True)
                 mensaje_mostrado=True
             valores_reales = y[existe].values
             st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
@@ -168,10 +168,9 @@ if uploaded_file is not None:
     grouped = basededatos.groupby('CODCENT')
     # st.write("Tipos de datos de las columnas:", grouped.dtypes)
 
-    st.write("Introduce el nombre de la máquina")
-
+    
     # Entrada del usuario
-    entrada = st.text_input("Introduce la cadena de datos:", "")
+    entrada = st.text_input("Introduce el nombre de la máquina:", "")
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
 
     if nueva_maquina is not None:
