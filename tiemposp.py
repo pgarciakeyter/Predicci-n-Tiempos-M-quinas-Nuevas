@@ -231,7 +231,7 @@ if uploaded_file is not None:
     
     # Entrada del usuario
     entrada = st.text_input("Introduce el nombre de la máquina:", "")
-    nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+    #nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
 
     if nueva_maquina is not None:
         predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
