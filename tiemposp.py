@@ -9,7 +9,7 @@ url_imagen = "https://github.com/pgarciakeyter/Predicci-n-Tiempos-M-quinas-Nueva
 col1, col2, col3 = st.columns([1, 2, 1])  # Columnas para centrar la imagen
 
 with col2:  # Columna del medio
-st.image(url_imagen, width=200) 
+    st.image(url_imagen, width=200) 
 # Mostrar la imagen al inicio
 #st.image(url_imagen, caption="Mi imagen ajustada", width=500) 
 #st.image(url_imagen, caption=" ", use_container_width=True)
