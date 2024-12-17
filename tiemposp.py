@@ -93,12 +93,13 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     
     existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
     
+    
     if existe.any():  # Si existe un valor exacto en los registros
         st.write(f"El equipo {entrada} ha sido fabricado anteriormente. Estos son los datos que se tienen del mismo:")
         for codcent, grupo in grouped:
             st.write(f"Centro {codcent}: {len(grupo)} registros")
             nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
-                    # Separar características y etiquetas
+            # Separar características y etiquetas
             x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
             y = grupo['PROMEDIOHORAS']        
             
@@ -108,6 +109,11 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             st.write("---")          
       else:
           for codcent, grupo in grouped:
+              st.write(f"Centro {codcent}: {len(grupo)} registros")
+              nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
+              # Separar características y etiquetas
+              x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
+              y = grupo['PROMEDIOHORAS']    
               #Dividir los datos en entrenamiento y prueba
               #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)        
               #Entrenar modelo Random Forest
@@ -119,8 +125,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
               total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual        
               st.write("---")
     
-        # Mostrar la suma total de las predicciones
-    st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
+    # Mostrar la suma total de las predicciones
+    st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")    
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
