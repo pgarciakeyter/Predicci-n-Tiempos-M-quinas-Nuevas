@@ -7,7 +7,8 @@ import numpy as np
 url_imagen = "https://github.com/pgarciakeyter/Predicci-n-Tiempos-M-quinas-Nuevas/blob/main/assets/keyter%20logo.png?raw=true"
 
 # Mostrar la imagen al inicio
-st.image(url_imagen, caption=" ", use_container_width=True)
+st.image(url_imagen, caption="Mi imagen ajustada", width=500) 
+#st.image(url_imagen, caption=" ", use_container_width=True)
 
 
 def generar_diccionario_valores(df, columna):
