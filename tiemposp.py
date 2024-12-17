@@ -92,6 +92,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     total_predicciones = 0
     
     existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
+    else:
     if existe.any():  # Si existe un valor exacto en los registros
         st.write(f"El equipo {entrada} ha sido fabricado anteriormente. Estos son los datos que se tienen del mismo:")
         for codcent, grupo in grouped:
@@ -104,27 +105,22 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             valores_reales = y[existe].values
             st.write(f"Datos reales encontrados para el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
             total_predicciones += sum(valores_reales)
-            st.write("---")
-            
-     else:
+            st.write("---")          
+      else:
           for codcent, grupo in grouped:
-            # Dividir los datos en entrenamiento y prueba
-            #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)
-    
-            # Entrenar modelo Random Forest
-                rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
-                rf_model.fit(x, y)
-        
-                # Predicción
-                rf_predictions = rf_model.predict(maquina)
-        
-                st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
-                total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual
-        
-                st.write("---")
+              #Dividir los datos en entrenamiento y prueba
+              #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)        
+              #Entrenar modelo Random Forest
+              rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+              rf_model.fit(x, y)        
+              #Predicción
+              rf_predictions = rf_model.predict(maquina)        
+              st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
+              total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual        
+              st.write("---")
     
         # Mostrar la suma total de las predicciones
-        st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
+    st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
