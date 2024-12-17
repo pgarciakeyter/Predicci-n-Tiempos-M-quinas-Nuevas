@@ -103,7 +103,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
         if existe.any():  # Si existe un valor exacto en los registros
             if not mensaje_mostrado:                
-                st.write(f"**El equipo {entrada} ya ha sido fabricado antes**")
+                st.write(f"**El equipo {entrada} se ha fabricado anteriormente**")
                 mensaje_mostrado=True
             valores_reales = y[existe].values
             st.write(f"Nº de horas imputadas del centro  **{int(codcent)} - {nombre_codcent}** en este equipo: **{valores_reales[0]} horas**")
