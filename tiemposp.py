@@ -103,11 +103,11 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
         if existe.any():  # Si existe un valor exacto en los registros
             if not mensaje_mostrado:                
-                st.write(f"El equipo {entrada} ya ha sido fabricado antes")
+                st.write(f"#El equipo {entrada} ya ha sido fabricado antes")
                 mensaje_mostrado=True
-            st.write(f"El centro {codcent} tiene {len(grupo)} registros")
             valores_reales = y[existe].values
-            st.write(f"Datos registrados en el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
+            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
+            st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(valores_reales)
         else:
             # Entrenar modelo Random Forest si no se encuentran datos exactos
@@ -116,8 +116,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-            st.write(f"El centro {codcent} tiene {len(grupo)} registros")
-            st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
+            st.write(f"Predicciones para el centro {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
+            st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(rf_predictions)
 
         st.write("---")
