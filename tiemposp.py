@@ -106,7 +106,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
                 st.write(f"**El equipo {entrada} ya ha sido fabricado antes**")
                 mensaje_mostrado=True
             valores_reales = y[existe].values
-            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {round(valores_reales, 2)} horas")
+            valores_reales_redondeados = [round(valor, 2) for valor in valores_reales]
+            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_reales_redondeados} horas")
             st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(valores_reales)
         else:
@@ -116,14 +117,15 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-            st.write(f"Predicciones para el centro {int(codcent)} - {nombre_codcent}: {round(rf_predictions, 2)} horas")
+            valores_predecidos_redondeados = [round(valor, 2) for valor in rf_predictions]
+            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_predecidos_redondeados} horas")
             st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(rf_predictions)
 
         st.write("---")
 
     # Mostrar la suma total de las predicciones o valores reales
-    st.write(f"Total de horas empleadas en la máquina: {round(total_predicciones,2)} horas")   
+    st.write(f"Total de horas empleadas en la máquina: {round(total_predicciones, 2)} horas")   
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
