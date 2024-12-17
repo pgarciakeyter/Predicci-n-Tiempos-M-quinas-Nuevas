@@ -112,7 +112,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         else:
             # Entrenar modelo Random Forest si no se encuentran datos exactos
             if not mensaje_mostrado:                
-                st.write(f"**El equipo {entrada} nunca se ha fabricado. A continuación se mostrarán predicciones de tiempos:**")
+                st.write(f"**El equipo {entrada} nunca se ha fabricado. Se mostrarán predicciones de tiempos:**")
                 mensaje_mostrado=True
             rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
             rf_model.fit(x, y)
