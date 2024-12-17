@@ -106,9 +106,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
                 st.write(f"**El equipo {entrada} ya ha sido fabricado antes**")
                 mensaje_mostrado=True
             valores_reales = y[existe].values
-            valores_reales_redondeados = [round(valor, 2) for valor in valores_reales]
-            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_reales_redondeados} horas")
-            st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
+            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
+            st.write(f"Este centro ha registrado {len(grupo)} datos")
             total_predicciones += sum(valores_reales)
         else:
             # Entrenar modelo Random Forest si no se encuentran datos exactos
@@ -117,8 +116,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-            valores_predecidos_redondeados = [round(valor, 2) for valor in rf_predictions]
-            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {valores_predecidos_redondeados} horas")
+            st.write(f"Datos registrados en el centro {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
             st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(rf_predictions)
 
