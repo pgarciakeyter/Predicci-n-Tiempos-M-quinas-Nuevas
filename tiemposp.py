@@ -101,9 +101,9 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         y = grupo['PROMEDIOHORAS']
 
         # Verificar si los datos de la máquina existen en los registros
-        existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
+        existe = x.isin(entrada.to_dict(orient="list")).all(axis=1)
         if existe.any():  # Si existe un valor exacto en los registros
-            st.write(f"El equipo {equipo} ya ha sido fabricado antes")
+            st.write(f"El equipo {entrada} ya ha sido fabricado antes")
             valores_reales = y[existe].values
             st.write(f"Datos registrados en el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
             total_predicciones += sum(valores_reales)
