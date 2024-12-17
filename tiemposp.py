@@ -4,17 +4,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
+# Mostrar la imagen al inicio
 url_imagen = "https://github.com/pgarciakeyter/Predicci-n-Tiempos-M-quinas-Nuevas/blob/main/assets/keyter%20logo.png?raw=true"
 
 col1, col2, col3 = st.columns([1, 2, 1])  # Columnas para centrar la imagen
 
 with col2:  # Columna del medio
     st.image(url_imagen, width=500) 
-# Mostrar la imagen al inicio
-#st.image(url_imagen, caption="Mi imagen ajustada", width=500) 
-#st.image(url_imagen, caption=" ", use_container_width=True)
-
-
+    
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
@@ -103,20 +100,28 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
         y = grupo['PROMEDIOHORAS']
 
-        # Dividir los datos en entrenamiento y prueba
-        #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)
-
-        # Entrenar modelo Random Forest
-        rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
-        rf_model.fit(x, y)
-
-        # Predicción
-        rf_predictions = rf_model.predict(maquina)
-
-        st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
-        total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual
-
-        st.write("---")
+        # Verificar si los datos de la máquina existen en los registros
+        existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
+        if existe.any():  # Si existe un valor exacto en los registros
+            st.write(f"El equipo {entrada} ha sido fabricado anteriormente. Estos son los datos que se tienen del mismo:")
+            valores_reales = y[existe].values
+            st.write(f"Datos reales encontrados para el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
+            total_predicciones += sum(valores_reales)
+        else:
+            # Dividir los datos en entrenamiento y prueba
+            #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)
+    
+            # Entrenar modelo Random Forest
+            rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+            rf_model.fit(x, y)
+    
+            # Predicción
+            rf_predictions = rf_model.predict(maquina)
+    
+            st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
+            total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual
+    
+            st.write("---")
 
     # Mostrar la suma total de las predicciones
     st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")
