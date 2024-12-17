@@ -78,21 +78,6 @@ def solicitar_datos_usuario_streamlit(entrada):
             return None
 
 
-# Streamlit App
-st.title("Predicción de Tiempos para Nuevas Máquinas")
-
-# Cargar archivo
-uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["xlsx"])
-
-if uploaded_file is not None:
-    basededatos = pd.read_excel(uploaded_file, sheet_name=1)
-    st.write("Vista previa de los datos:")
-    st.write(basededatos.head())
-
-    # Preprocesamiento y otros pasos...
-    
-    # Llamar a la función para solicitar datos y seleccionar la máquina
-    nueva_maquina = solicitar_datos_usuario_streamlit(basededatos)
 
 def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     st.write("### Predicción de Tiempos por Máquina")
