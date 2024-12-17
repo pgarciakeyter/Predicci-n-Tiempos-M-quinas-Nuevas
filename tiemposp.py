@@ -93,7 +93,6 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     mensaje_mostrado = False
     
     for codcent, grupo in grouped:
-        st.write(f"El centro {codcent}tiene {len(grupo)} registros")
         nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
 
         # Separar características y etiquetas
@@ -106,6 +105,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             if not mensaje_mostrado:                
                 st.write(f"El equipo {entrada} ya ha sido fabricado antes")
                 mensaje_mostrado=True
+            st.write(f"El centro {codcent} tiene {len(grupo)} registros")
             valores_reales = y[existe].values
             st.write(f"Datos registrados en el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
             total_predicciones += sum(valores_reales)
@@ -116,7 +116,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-
+            st.write(f"El centro {codcent} tiene {len(grupo)} registros")
             st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
             total_predicciones += sum(rf_predictions)
 
