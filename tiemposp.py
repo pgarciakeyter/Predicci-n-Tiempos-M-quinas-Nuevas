@@ -106,7 +106,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
                 st.write(f"**El equipo {entrada} ya ha sido fabricado antes**")
                 mensaje_mostrado=True
             valores_reales = y[existe].values
-            st.write(f"Nº de horas imputadas del centro  {int(codcent)} - {nombre_codcent} en este equipo: {valores_reales} horas")
+            st.write(f"Nº de horas imputadas del centro  {int(codcent)} - {nombre_codcent} en este equipo: **{valores_reales} horas**")
             st.write(f"Este centro ha registrado {len(grupo)} datos")
             total_predicciones += sum(valores_reales)
         else:
@@ -116,7 +116,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
             # Predicción
             rf_predictions = rf_model.predict(maquina)
-            st.write(f"Predicción de horas imputadas del centro {int(codcent)} - {nombre_codcent} en este equipo: {rf_predictions} horas")
+            st.write(f"Predicción de horas imputadas del centro {int(codcent)} - {nombre_codcent} en este equipo: **{rf_predictions} horas**")
             st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
             total_predicciones += sum(rf_predictions)
 
