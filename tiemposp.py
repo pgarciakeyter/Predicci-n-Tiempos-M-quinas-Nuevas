@@ -90,43 +90,38 @@ def solicitar_datos_usuario_streamlit(entrada):
 def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     st.write("### Predicción de Tiempos por Máquina")
     total_predicciones = 0
+    mensaje_mostrado = False
     
-    existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
-    
-    
-    if existe.any():  # Si existe un valor exacto en los registros
-        st.write(f"El equipo {entrada} ha sido fabricado anteriormente. Estos son los datos que se tienen del mismo:")
-        for codcent, grupo in grouped:
-            st.write(f"Centro {codcent}: {len(grupo)} registros")
-            nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
-            # Separar características y etiquetas
-            x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
-            y = grupo['PROMEDIOHORAS']        
-            
+    for codcent, grupo in grouped:
+        st.write(f"El centro {codcent}tiene {len(grupo)} registros")
+        nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
+
+        # Separar características y etiquetas
+        x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
+        y = grupo['PROMEDIOHORAS']
+
+        # Verificar si los datos de la máquina existen en los registros
+        existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
+        if existe.any():  # Si existe un valor exacto en los registros
+            st.write(f"El equipo {equipo} ya ha sido fabricado antes")
             valores_reales = y[existe].values
-            st.write(f"Datos reales encontrados para el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
+            st.write(f"Datos registrados en el grupo {int(codcent)} - {nombre_codcent}: {valores_reales} horas")
             total_predicciones += sum(valores_reales)
-            st.write("---")          
-    else:
-        for codcent, grupo in grouped:
-            st.write(f"Centro {codcent}: {len(grupo)} registros")
-            nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
-            # Separar características y etiquetas
-            x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
-            y = grupo['PROMEDIOHORAS']    
-                          #Dividir los datos en entrenamiento y prueba
-                          #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=21)        
-                          #Entrenar modelo Random Forest
+        else:
+            # Entrenar modelo Random Forest si no se encuentran datos exactos
             rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
-            rf_model.fit(x, y)        
-            #Predicción
-            rf_predictions = rf_model.predict(maquina)        
+            rf_model.fit(x, y)
+
+            # Predicción
+            rf_predictions = rf_model.predict(maquina)
+
             st.write(f"Predicciones para el grupo {int(codcent)} - {nombre_codcent}: {rf_predictions} horas")
-            total_predicciones += sum(rf_predictions)  # Sumar las predicciones del grupo actual        
-            st.write("---")
-    
-    # Mostrar la suma total de las predicciones
-    st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")    
+            total_predicciones += sum(rf_predictions)
+
+        st.write("---")
+
+    # Mostrar la suma total de las predicciones o valores reales
+    st.write(f"Total de horas empleadas en la máquina: {total_predicciones} horas")   
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
