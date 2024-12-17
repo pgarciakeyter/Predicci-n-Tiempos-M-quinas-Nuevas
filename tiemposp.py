@@ -47,7 +47,7 @@ def traducir_valor_streamlit(campo, valor, valores_traduccion):
         st.error(f"El valor '{valor}' no es válido para el campo '{campo}'. Por favor, revisa los datos ingresados.")
         #raise ValueError(f"El valor '{valor}' no es válido para el campo '{campo}'.")
 
-def solicitar_datos_usuario_streamlit(entrada):
+"""def solicitar_datos_usuario_streamlit(entrada):
     if st.button("Buscar máquina"):
         if len(entrada) < 10:
             st.error("Error: La cadena es demasiado corta para contener todos los valores.")
@@ -85,7 +85,63 @@ def solicitar_datos_usuario_streamlit(entrada):
 
         except ValueError as e:
             st.error(f"Error: {e}")
+            return None"""
+# Función para seleccionar máquina con opción a buscar
+# Función para seleccionar máquina con opción a buscar
+def seleccionar_maquina_streamlit(basededatos):
+    # Obtener las máquinas disponibles desde la columna 'MAQUINA' de tu DataFrame
+    maquinas_disponibles = basededatos['MAQUINA'].unique()
+
+    # Crear un desplegable con las máquinas disponibles (el usuario puede buscar en este desplegable)
+    maquina_seleccionada = st.selectbox(
+        "Selecciona una máquina o escribe una nueva:",
+        options=maquinas_disponibles.tolist() + ['Agregar nueva máquina'],
+        index=0  # Puedes configurar un índice por defecto si es necesario
+    )
+
+    # Verificar si el usuario seleccionó "Agregar nueva máquina"
+    if maquina_seleccionada == 'Agregar nueva máquina':
+        nueva_maquina = st.text_input("Introduce el nombre de la nueva máquina:")
+        if nueva_maquina:
+            st.write(f"Máquina nueva agregada: {nueva_maquina}")
+            return nueva_maquina  # Devuelve el nombre de la nueva máquina
+        else:
+            st.write("Por favor, introduce el nombre de la nueva máquina.")
             return None
+    else:
+        # Si seleccionó una máquina existente
+        st.write(f"Máquina seleccionada: {maquina_seleccionada}")
+        return maquina_seleccionada
+
+# Modificación en la función 'solicitar_datos_usuario_streamlit' para usar el desplegable
+def solicitar_datos_usuario_streamlit(basededatos):
+    # Llamar al desplegable para seleccionar la máquina
+    maquina_seleccionada = seleccionar_maquina_streamlit(basededatos)
+
+    # Verificar si el usuario seleccionó una máquina
+    if maquina_seleccionada:
+        st.write(f"Máquina seleccionada: {maquina_seleccionada}")
+        # Realizar acciones adicionales según la máquina seleccionada (por ejemplo, predecir tiempos)
+        return maquina_seleccionada
+    else:
+        st.error("Error: No se seleccionó ninguna máquina.")
+        return None
+
+# Streamlit App
+st.title("Predicción de Tiempos para Nuevas Máquinas")
+
+# Cargar archivo
+uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["xlsx"])
+
+if uploaded_file is not None:
+    basededatos = pd.read_excel(uploaded_file, sheet_name=1)
+    st.write("Vista previa de los datos:")
+    st.write(basededatos.head())
+
+    # Preprocesamiento y otros pasos...
+    
+    # Llamar a la función para solicitar datos y seleccionar la máquina
+    nueva_maquina = solicitar_datos_usuario_streamlit(basededatos)
 
 def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
     st.write("### Predicción de Tiempos por Máquina")
