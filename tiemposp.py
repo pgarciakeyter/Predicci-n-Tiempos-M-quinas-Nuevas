@@ -147,7 +147,7 @@ if uploaded_file is not None:
     basededatos = basededatos.drop(columns=["CENTRO"])
     basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
     basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    #basededatos = basededatos.drop(columns=["NUMREGISTROS"])
+    basededatos = basededatos.drop(columns=["NUMREGISTROS"])
     basededatos = basededatos.drop(columns=["SUMAHORAS"])
     group_sizes = basededatos.groupby('CODCENT').size()
     basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
