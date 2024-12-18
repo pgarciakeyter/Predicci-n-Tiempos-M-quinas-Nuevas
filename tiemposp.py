@@ -98,7 +98,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
 
         # Separar características y etiquetas
-        x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT'])
+        x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT', "NUMREGISTROS"])
         y = grupo['PROMEDIOHORAS']
 
         # Verificar si los datos de la máquina existen en los registros
@@ -147,7 +147,7 @@ if uploaded_file is not None:
     basededatos = basededatos.drop(columns=["CENTRO"])
     basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
     basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    basededatos = basededatos.drop(columns=["NUMREGISTROS"])
+    #basededatos = basededatos.drop(columns=["NUMREGISTROS"])
     basededatos = basededatos.drop(columns=["SUMAHORAS"])
     group_sizes = basededatos.groupby('CODCENT').size()
     basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
@@ -157,6 +157,7 @@ if uploaded_file is not None:
     basededatos = basededatos[basededatos['CODCENT'] != 5440]
     basededatos = basededatos.dropna(how='any')
     basededatos["CHASIS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
+    basededatos["NUMREGISTROS"] = pd.to_numeric(basededatos["CHASIS"], errors="coerce")
     
     # Generar el diccionario
     valores_familia = generar_diccionario_valores(basededatos, "FAMILIA")
