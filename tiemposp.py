@@ -12,7 +12,7 @@ col1, col2, col3 = st.columns([1, 2, 1])  # Columnas para centrar la imagen
 with col2:  # Columna del medio
     st.image(url_imagen, width=500) 
     
-t.sidebar.markdown("### Creado por [Paula García Chacón]")    
+st.sidebar.markdown("### Creado por [Paula García Chacón]")    
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
