@@ -109,7 +109,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
                 mensaje_mostrado=True
             valores_reales = y[existe].values
             st.write(f"Nº de horas imputadas del centro  **{int(codcent)} - {nombre_codcent}** en este equipo: **{valores_reales[0]} horas**")
-            st.write(f"Este centro ha registrado {len(grupo)} datos")
+            #st.write(f"Este centro ha registrado {len(grupo)} datos")
+            st.write(f"Este equipo ha pasado por este centro {grupo['NUMREGISTRO'].values} veces")
             total_predicciones += sum(valores_reales)
         else:
             # Entrenar modelo Random Forest si no se encuentran datos exactos
@@ -146,7 +147,7 @@ if uploaded_file is not None:
     basededatos = basededatos.drop(columns=["CENTRO"])
     basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
     basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    basededatos = basededatos.drop(columns=["NUMREGISTROS"])
+    #basededatos = basededatos.drop(columns=["NUMREGISTROS"])
     basededatos = basededatos.drop(columns=["SUMAHORAS"])
     group_sizes = basededatos.groupby('CODCENT').size()
     basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
