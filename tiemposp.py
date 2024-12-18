@@ -14,7 +14,7 @@ with col2:  # Columna del medio
     
 # Pie con identificación
 st.markdown("---")
-st.markdown("**Creado por [Paula García Chacón](https://www.tuwebsite.com)**") 
+#st.markdown("**Creado por [Paula García Chacón](https://www.tuwebsite.com)**") 
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
