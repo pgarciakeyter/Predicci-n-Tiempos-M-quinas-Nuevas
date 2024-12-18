@@ -126,7 +126,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         st.write("---")
 
     # Mostrar la suma total de las predicciones o valores reales
-    st.write(f"Total de horas empleadas en la máquina: {round(total_predicciones, 2)} horas")   
+    st.write(f"Total de horas empleadas en la máquina: **{round(total_predicciones, 2)} horas**")   
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
