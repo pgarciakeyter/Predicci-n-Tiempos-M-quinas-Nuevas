@@ -14,7 +14,7 @@ with col2:  # Columna del medio
     
 # Pie con identificación
 st.markdown("---")
-#st.markdown("**Creado por [Paula García Chacón](https://www.tuwebsite.com)**") 
+
 def generar_diccionario_valores(df, columna):
     # Obtener valores únicos y ordenarlos para consistencia
     valores_unicos = sorted(map(str, df[columna].unique()))
@@ -140,9 +140,6 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
-st.markdown("---")
-st.markdown("<p style='font-size: 12px; text-align: center;'>Creado por Paula García Chacón</p>", unsafe_allow_html=True)
-
 
 
 @st.cache_data
@@ -189,6 +186,8 @@ if uploaded_file is not None:
     # Entrada del usuario
     entrada = st.text_input("Introduce el nombre de la máquina:", "")
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+    st.markdown("---")
+    st.markdown("<p style='font-size: 12px; text-align: center;'>Created by Paula García Chacón for Keyter Technologies S.L. </p>", unsafe_allow_html=True)
 
     if nueva_maquina is not None:
         predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
