@@ -145,15 +145,16 @@ st.title("Predicción de Tiempos para Nuevas Máquinas")
 uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["xlsx"])
 
 if uploaded_file is not None:
-    basededatos = pd.read_excel(uploaded_file, sheet_name=1)
+    #basededatos = pd.read_excel(uploaded_file, sheet_name=1)
+    basededatos = pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS"])
     st.write("Vista previa de los datos:")
     st.write(basededatos.head())
 
     # Preprocesamiento
-    basededatos = basededatos.drop(columns=["CENTRO"])
+    """ basededatos = basededatos.drop(columns=["CENTRO"])
     basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
     basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    basededatos = basededatos.drop(columns=["SUMAHORAS"])
+    basededatos = basededatos.drop(columns=["SUMAHORAS"])"""
     group_sizes = basededatos.groupby('CODCENT').size()
     basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
     basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
