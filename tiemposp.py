@@ -193,7 +193,7 @@ if uploaded_file is not None:
         #recomendaciones_filtradas = []
         
     if recomendaciones_filtradas:
-    seleccionado = st.selectbox("Recomendaciones", recomendaciones_filtradas, key="buscador")
+        seleccionado = st.selectbox("Recomendaciones", recomendaciones_filtradas, key="buscador")
 
     # Mostrar el valor seleccionado, pero el campo de búsqueda se mantiene editable
     entrada = seleccionado
