@@ -156,7 +156,7 @@ if uploaded_file is not None:
     basededatos = basededatos.drop(columns=["MINIMOHORAS"])
     basededatos = basededatos.drop(columns=["SUMAHORAS"])"""
     group_sizes = basededatos.groupby('CODCENT').size()
-    basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 40, :]
+    basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 120, :]
     basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
     valid_groups = group_sizes[group_sizes >= 10].index
     basededatos = basededatos[basededatos['CODCENT'].isin(valid_groups)]
