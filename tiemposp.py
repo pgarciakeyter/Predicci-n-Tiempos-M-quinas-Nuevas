@@ -114,8 +114,6 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             #st.write(f"Este centro ha registrado {len(grupo)} datos")
             if num_registros == 1 :
                 st.write(f"Este equipo ha pasado por este centro {num_registros[0]} vez")
-            if num_registros == 0 :
-                st.write(f"Este equipo ha pasado por este centro 0 veces") 
             else:
                 st.write(f"Este equipo ha pasado por este centro {num_registros[0]} veces")                
             total_predicciones += sum(valores_reales)
@@ -131,7 +129,8 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             rf_predictions = rf_model.predict(maquina)
             rf_predictions_redondeados = list(map(lambda x: round(x, 2), rf_predictions))
             st.write(f"Predicción de horas imputadas del centro **{int(codcent)} - {nombre_codcent}** en este equipo: **{rf_predictions_redondeados[0]} horas**")
-            st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
+            #st.write(f"El centro {codcent} ha registrado {len(grupo)} datos")
+            st.write(f"Este equipo ha pasado por este centro 0 veces")   
             total_predicciones += sum(rf_predictions)
 
         st.write("---")
