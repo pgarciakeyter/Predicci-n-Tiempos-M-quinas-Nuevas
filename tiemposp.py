@@ -186,31 +186,11 @@ if uploaded_file is not None:
     # Entrada del usuario
     df = pd.read_excel(uploaded_file, sheet_name=2, usecols=["EQUIPO"])
     recomendaciones = df['EQUIPO'].dropna().tolist()
-    entrada = st.text_input("Introduce el nombre de la máquina:", "")
-    #if entrada:
-    recomendaciones_filtradas = [recom for recom in recomendaciones if entrada.lower() in recom.lower()]
-    #else:
-        #recomendaciones_filtradas = []
-        
-    if recomendaciones_filtradas:
-        seleccionado = st.selectbox("Recomendaciones", recomendaciones_filtradas, key="buscador")
+    #entrada = st.text_input("Introduce el nombre de la máquina:", "")
+    entrada= st.selectbox("MAQUINA", options = recomendaciones, index = "None")
 
-    # Mostrar el valor seleccionado, pero el campo de búsqueda se mantiene editable
-        entrada = seleccionado
-
-    else:
-        seleccionado = None
-
-    # El usuario aún puede modificar el valor antes de realizar la búsqueda
-    st.write("Valor actual del campo de búsqueda:", entrada)
     
-    # Lógica para realizar la búsqueda final (por ejemplo, mostrar datos relacionados o hacer una acción)
-    if entrada:
-        st.write(f"Buscando resultados para: {entrada}")
-        # Aquí puedes realizar la búsqueda real sobre el DataFrame, por ejemplo:
-        resultados = df[df['EQUIPO'].str.contains(entrada, case=False)]
-        st.write(resultados)
-        nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+    nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
     
 
     if nueva_maquina is not None:
