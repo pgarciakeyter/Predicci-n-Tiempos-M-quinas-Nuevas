@@ -48,7 +48,7 @@ def traducir_valor_streamlit(campo, valor, valores_traduccion):
         raise ValueError(f"El valor '{valor}' no es válido para el campo '{campo}'.")
 # Funciones
 def solicitar_datos_usuario_streamlit(entrada):
-    if st.button("Procesar datos"):
+    if st.button("Buscar Máquina"):
         if len(entrada) < 10:
             st.error("Error: La cadena es demasiado corta para contener todos los valores.")
             return None
