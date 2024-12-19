@@ -98,9 +98,9 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
         nombre_codcent = codcent_nombre.get(codcent, "Desconocido")
 
         # Separar características y etiquetas
-        x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT', "NUMREGISTROS"])
+        x = grupo.drop(columns=['PROMEDIOHORAS', 'CODCENT', 'NUMREGISTROS'])
         y = grupo['PROMEDIOHORAS']
-        z= grupo['NUMREGISTROS']
+        z = grupo['NUMREGISTROS']
 
         # Verificar si los datos de la máquina existen en los registros
         existe = x.isin(maquina.to_dict(orient="list")).all(axis=1)
@@ -112,7 +112,7 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             num_registros = z[existe].values
             st.write(f"Nº de horas imputadas del centro  **{int(codcent)} - {nombre_codcent}** en este equipo: **{valores_reales[0]} horas**")
             #st.write(f"Este centro ha registrado {len(grupo)} datos")
-            st.write(f"Este equipo ha pasado por este centro {num_registros[0]} veces")
+            st.write(f"Este equipo ha pasado por este centro {num_registros} veces")
             total_predicciones += sum(valores_reales)
         else:
             # Entrenar modelo Random Forest si no se encuentran datos exactos
