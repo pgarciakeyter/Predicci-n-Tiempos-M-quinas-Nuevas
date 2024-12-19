@@ -184,16 +184,21 @@ if uploaded_file is not None:
 
     
     # Entrada del usuario
-    recomendaciones = pd.read_excel(uploaded_file, sheet_name=2, usecols=["EQUIPO"])
+    df = pd.read_excel(uploaded_file, sheet_name=2, usecols=["EQUIPO"])
+    recomendaciones = df['EQUIPO'].dropna().tolist()
     entrada = st.text_input("Introduce el nombre de la máquina:", "")
     if entrada:
         recomendaciones_filtradas = [recom for recom in recomendaciones if entrada.lower() in recom.lower()]
     else:
-        recomendaciones_filtradas = recomendaciones
-    seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
+        recomendaciones_filtradas = []
+        
+    if recomendaciones_filtradas:
+        seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
+        st.write(f'Te interesa: {seleccionado}')
+    else:
+        st.write('No se encontraron resultados.')
 
-    # Mostrar la opción seleccionada
-    st.write(f'Te interesa: {seleccionado}')
+    
 
 
 
