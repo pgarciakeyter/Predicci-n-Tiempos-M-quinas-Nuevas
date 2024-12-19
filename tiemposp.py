@@ -193,9 +193,24 @@ if uploaded_file is not None:
         #recomendaciones_filtradas = []
         
     if recomendaciones_filtradas:
-        seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
-        entrada = seleccionado
-    nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
+    seleccionado = st.selectbox("Recomendaciones", recomendaciones_filtradas, key="buscador")
+
+    # Mostrar el valor seleccionado, pero el campo de búsqueda se mantiene editable
+    entrada = seleccionado
+
+    else:
+        seleccionado = None
+
+    # El usuario aún puede modificar el valor antes de realizar la búsqueda
+    st.write("Valor actual del campo de búsqueda:", entrada)
+    
+    # Lógica para realizar la búsqueda final (por ejemplo, mostrar datos relacionados o hacer una acción)
+    if entrada:
+        st.write(f"Buscando resultados para: {entrada}")
+        # Aquí puedes realizar la búsqueda real sobre el DataFrame, por ejemplo:
+        resultados = df[df['EQUIPO'].str.contains(entrada, case=False)]
+        st.write(resultados)
+        nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
     
 
     if nueva_maquina is not None:
