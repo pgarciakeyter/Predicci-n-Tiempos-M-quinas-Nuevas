@@ -146,7 +146,7 @@ uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["x
 
 if uploaded_file is not None:
     #basededatos = pd.read_excel(uploaded_file, sheet_name=1)
-    basededatos = pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS"])
+    basededatos = pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS", "DESVTIPICAHORAS"])
     st.write("Vista previa de los datos:")
     st.write(basededatos.head())
 
