@@ -196,7 +196,7 @@ if uploaded_file is not None:
         seleccionado = st.selectbox("Recomendaciones", recomendaciones_filtradas, key="buscador")
 
     # Mostrar el valor seleccionado, pero el campo de búsqueda se mantiene editable
-    entrada = seleccionado
+        entrada = seleccionado
 
     else:
         seleccionado = None
