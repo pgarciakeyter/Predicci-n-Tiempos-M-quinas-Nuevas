@@ -50,7 +50,7 @@ def traducir_valor_streamlit(campo, valor, valores_traduccion):
 def solicitar_datos_usuario_streamlit(entrada):
     if st.button("Buscar Máquina"):
         if len(entrada) < 10:
-            st.error("Error: La cadena es demasiado corta para contener todos los valores.")
+            st.error("El nombre de la máquina es demasiado corto")
             return None
 
         try:
@@ -194,7 +194,7 @@ if uploaded_file is not None:
         
     if recomendaciones_filtradas:
         seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
-        
+        entrada = seleccionado
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
     
 
