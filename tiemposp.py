@@ -187,7 +187,7 @@ if uploaded_file is not None:
     df = pd.read_excel(uploaded_file, sheet_name=2, usecols=["EQUIPO"])
     recomendaciones = df['EQUIPO'].dropna().tolist()
     #entrada = st.text_input("Introduce el nombre de la máquina:", "")
-    entrada= st.selectbox("MAQUINA", options = recomendaciones, index = "None")
+    entrada= st.selectbox(recomendaciones, options = recomendaciones.unique(), index = "None")
 
     
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
