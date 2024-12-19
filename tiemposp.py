@@ -112,9 +112,9 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
             num_registros = z[existe].values
             st.write(f"Nº de horas imputadas del centro  **{int(codcent)} - {nombre_codcent}** en este equipo: **{valores_reales[0]} horas**")
             #st.write(f"Este centro ha registrado {len(grupo)} datos")
-            if num_registros = 1 :
+            if num_registros == 1 :
                 st.write(f"Este equipo ha pasado por este centro {num_registros[0]} vez")
-            if num_registros = 0 :
+            if num_registros == 0 :
                 st.write(f"Este equipo ha pasado por este centro 0 veces") 
             else:
                 st.write(f"Este equipo ha pasado por este centro {num_registros[0]} veces")                
