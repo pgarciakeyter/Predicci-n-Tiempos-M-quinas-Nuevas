@@ -141,12 +141,14 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
 
+@st.cache_data
+def cargar_datos(uploaded_file):
+    return pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS", "DESVTIPICAHORAS"])
 # Cargar archivo
 uploaded_file = st.file_uploader("Sube el archivo Excel con los datos", type=["xlsx"])
 
 if uploaded_file is not None:
-    #basededatos = pd.read_excel(uploaded_file, sheet_name=1)
-    basededatos = pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS", "DESVTIPICAHORAS"])
+    basededatos = cargar_datos(uploaded_file)
     st.write("Vista previa de los datos:")
     st.write(basededatos.head())
 
