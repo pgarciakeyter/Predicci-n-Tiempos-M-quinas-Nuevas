@@ -186,8 +186,10 @@ if uploaded_file is not None:
     # Entrada del usuario
     entrada = st.text_input("Introduce el nombre de la máquina:", "")
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
-    st.markdown("---")
-    st.markdown("<p style='font-size: 12px; text-align: center;'>Created by Paula García Chacón for Keyter Technologies S.L. </p>", unsafe_allow_html=True)
+    
 
     if nueva_maquina is not None:
         predecir_tiempos_streamlit(nueva_maquina, grouped, codcent_nombre)
+
+    st.markdown("---")
+    st.markdown("<p style='font-size: 12px; text-align: center;'>Created by Paula García Chacón for Keyter Technologies S.L. </p>", unsafe_allow_html=True)
