@@ -194,14 +194,7 @@ if uploaded_file is not None:
         
     if recomendaciones_filtradas:
         seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
-        st.write(f'Te interesa: {seleccionado}')
-    else:
-        st.write('No se encontraron resultados.')
-
-    
-
-
-
+        
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
     
 
