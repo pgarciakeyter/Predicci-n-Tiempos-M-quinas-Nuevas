@@ -184,7 +184,19 @@ if uploaded_file is not None:
 
     
     # Entrada del usuario
+    recomendaciones = pd.read_excel(uploaded_file, sheet_name=2, usecols=["EQUIPO"])
     entrada = st.text_input("Introduce el nombre de la máquina:", "")
+    if entrada:
+    recomendaciones_filtradas = [recom for recom in recomendaciones if entrada.lower() in recom.lower()]
+    else:
+        recomendaciones_filtradas = recomendaciones
+    seleccionado = st.selectbox('Recomendaciones', recomendaciones_filtradas)
+
+    # Mostrar la opción seleccionada
+    st.write(f'Te interesa: {seleccionado}')
+
+
+
     nueva_maquina = solicitar_datos_usuario_streamlit(entrada)
     
 
