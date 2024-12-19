@@ -141,6 +141,33 @@ def predecir_tiempos_streamlit(maquina, grouped, codcent_nombre):
 # Streamlit App
 st.title("Predicción de Tiempos para Nuevas Máquinas")
 
+
+amilia_seleccionada = st.selectbox(
+    "Selecciona una FAMILIA:",
+    options=["(Todos)"] + sorted(df["FAMILIA"].unique())
+)
+funcionamiento_seleccionado = st.selectbox(
+    "Selecciona un FUNCIONAMIENTO:",
+    options=["(Todos)"] + sorted(df["FUNCIONAMIENTO"].unique())
+)
+version_seleccionada = st.selectbox(
+    "Selecciona una VERSIÓN:",
+    options=["(Todos)"] + sorted(df["VERSION"].unique())
+)
+
+# Filtrar el DataFrame según las selecciones
+filtro_df = df.copy()
+if familia_seleccionada != "(Todos)":
+    filtro_df = filtro_df[filtro_df["FAMILIA"] == familia_seleccionada]
+if funcionamiento_seleccionado != "(Todos)":
+    filtro_df = filtro_df[filtro_df["FUNCIONAMIENTO"] == funcionamiento_seleccionado]
+if version_seleccionada != "(Todos)":
+    filtro_df = filtro_df[filtro_df["VERSION"] == version_seleccionada]
+
+# Mostrar resultados
+st.write("Resultados Filtrados:", filtro_df)
+
+
 @st.cache_data
 def cargar_datos(uploaded_file):
     return pd.read_excel(uploaded_file, sheet_name=1, usecols=["CODCENT", "FAMILIA", "CHASIS", "FUNCIONAMIENTO", "VERSION", "VERSIONHIDR", "PROMEDIOHORAS", "NUMREGISTROS", "DESVTIPICAHORAS"])
