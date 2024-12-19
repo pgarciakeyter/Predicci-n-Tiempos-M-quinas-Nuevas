@@ -151,10 +151,7 @@ if uploaded_file is not None:
     st.write(basededatos.head())
 
     # Preprocesamiento
-    """ basededatos = basededatos.drop(columns=["CENTRO"])
-    basededatos = basededatos.drop(columns=["MAXIMOHORAS"])
-    basededatos = basededatos.drop(columns=["MINIMOHORAS"])
-    basededatos = basededatos.drop(columns=["SUMAHORAS"])"""
+    
     group_sizes = basededatos.groupby('CODCENT').size()
     basededatos = basededatos.loc[basededatos["DESVTIPICAHORAS"] < 120, :]
     basededatos = basededatos.drop(columns=["DESVTIPICAHORAS"])
